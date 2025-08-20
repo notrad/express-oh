@@ -1,12 +1,22 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 
 const router = Router();
+
+const validateUsers = (req: Request, res: Response, next: NextFunction) => {
+    const { name, email } = req.body;
+    if (!name || !email) {
+        return res.status(400).json({
+            message: 'Name and email are required'
+        });
+    }
+    next();
+};
 
 router.get('/', (req: Request, res: Response) => {
     res.json({ message: "Received GET" });
 });
 
-router.post('/', (req: Request, res: Response) => {
+router.post('/', validateUsers, (req: Request, res: Response) => {
     const newUser = req.body;
     res.status(201).json({
         message: 'Received POST',
@@ -14,7 +24,7 @@ router.post('/', (req: Request, res: Response) => {
     });
 });
 
-router.put('/:id', (req: Request, res: Response) => {
+router.put('/:id', validateUsers, (req: Request, res: Response) => {
     const userId = req.params.id;
     const updatedFields = req.body;
     res.json({
@@ -24,9 +34,9 @@ router.put('/:id', (req: Request, res: Response) => {
 });
 
 router.patch('/:id', (req: Request, res: Response) => {
-  const userId = req.params.id;
-  const updatedFields = req.body;
-  res.json({ message: `Received a PATCH HTTP method for user ${userId}`, data: updatedFields });
+    const userId = req.params.id;
+    const updatedFields = req.body;
+    res.json({ message: `Received a PATCH HTTP method for user ${userId}`, data: updatedFields });
 });
 
 router.delete('/:id', (req: Request, res: Response) => {
