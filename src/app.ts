@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import userRouter from './routes/users';
+import healthRouter from './routes/health';
 import notFoundHandler from './middlewares/notFoundHandler';
 import { devCorsOptions } from './common/constants/corsOptions';
 
@@ -12,6 +13,8 @@ app.use(morgan('dev'));
 app.use(cors(devCorsOptions));
 
 app.use(express.json());
+
+app.use('/health', healthRouter);
 
 app.use('/users', userRouter);
 
