@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
+import { userModelRateLimit } from "../common/constants/rateLimitOptions";
 
 const router = Router();
 
@@ -11,6 +12,8 @@ const validateUsers = (req: Request, res: Response, next: NextFunction) => {
     }
     next();
 };
+
+router.use(userModelRateLimit);
 
 router.get('/', (req: Request, res: Response) => {
     res.json({ message: "Received GET" });
