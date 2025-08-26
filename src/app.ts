@@ -5,6 +5,8 @@ import userRouter from './routes/users';
 import healthRouter from './routes/health';
 import notFoundHandler from './middlewares/notFoundHandler';
 import { devCorsOptions } from './common/constants/corsOptions';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './swagger/swagger';
 
 const app = express();
 
@@ -13,6 +15,12 @@ app.use(morgan('dev'));
 app.use(cors(devCorsOptions));
 
 app.use(express.json());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    explorer: true
+}));
+
+app.use('/openapi.json', (_req, res) => res.json(swaggerSpec));
 
 app.use('/health', healthRouter);
 
