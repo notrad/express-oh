@@ -1,4 +1,5 @@
-import { Router, Request, Response } from "express";
+import type { Request, Response } from "express";
+import { Router } from "express";
 
 const router = Router();
 
@@ -208,10 +209,11 @@ router.get('/detailed', (req: Request, res: Response) => {
 
         res.status(200).json(healthCheck);
     } catch (error) {
+        console.log(error);
         res.status(503).json({
             status: 'DOWN',
             timestamp: new Date().toISOString(),
-            error: 'Health check failed'
+            error: 'Health check failed',
         });
     }
 });

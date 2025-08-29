@@ -1,4 +1,5 @@
-import express, { NextFunction, Request, Response } from 'express';
+import type { Request, Response } from 'express';
+import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import userRouter from './routes/users';
@@ -28,7 +29,7 @@ app.use('/users', userRouter);
 
 app.use('/{*catchAll}', notFoundHandler);
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response) => {
     console.log(err.stack);
     res.status(500).json({
         message: 'Something went wrong'

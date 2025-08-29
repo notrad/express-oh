@@ -1,8 +1,9 @@
-import rateLimit, { RateLimitRequestHandler } from "express-rate-limit";
+import type { RateLimitRequestHandler } from "express-rate-limit";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 
 export const userModelRateLimit: RateLimitRequestHandler = rateLimit({
     windowMs: 60 * 1000,
-    max: 60,
+    max: 3,
     standardHeaders: true,
     legacyHeaders: false,
     message: {
@@ -11,8 +12,8 @@ export const userModelRateLimit: RateLimitRequestHandler = rateLimit({
     },
     skip: (req, _res) => req.method === 'OPTIONS',
     keyGenerator: (req, _res) => {
-        const userId = (req as any).user?.id;
         const apiKey = req.header('x-api-key');
-        return userId || apiKey || req.ip;
+        const userIpAddress: string = req.ip ? req.ip : "";
+        return apiKey || ipKeyGenerator(userIpAddress);
     }
 });

@@ -1,4 +1,4 @@
-import { CorsOptions } from "cors";
+import type { CorsOptions } from "cors";
 
 const allowedMethods: string[] = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
 const allowedHeaders: string[] = [
