@@ -1,15 +1,22 @@
-import app from "./app";
-import dotenv from "dotenv";
+import createApp from "./app";
+import { config, validateConfig } from "./config/config";
 
-dotenv.config();
+const startServer = async () => {
+  try {
+    validateConfig();
+    const app = createApp();
 
-const PORT = process.env.PORT;
+    app.listen(config.port, () => {
+      console.log(`Server is running on port ${config.port}`);
+      console.log(`Environment: ${config.nodeEnv}`);
+      console.log(
+        `Documentations available at: http://localhost:${config.port}/api-docs`,
+      );
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
 
-if (!PORT) {
-  console.error(`PORT is not defined in the environment variables:${PORT}`);
-  process.exit();
-}
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+startServer();
