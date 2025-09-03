@@ -1,11 +1,21 @@
 import type { Request, Response, NextFunction } from "express";
 import { Router } from "express";
 import { userModelRateLimit } from "../common/constants/rateLimitOptions";
+import type { User, CreateUserDto, UpdateUserDto } from "../types/User";
+
+interface RequestWithUser extends Request {
+  body: CreateUserDto | UpdateUserDto;
+  user?: User;
+}
 
 const router = Router();
 
-const validateUsers = (req: Request, res: Response, next: NextFunction) => {
-  const { name, email } = req.body;
+const validateUsers = (
+  req: RequestWithUser,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { name, email } = req.body as CreateUserDto;
   if (!name || !email) {
     return res.status(400).json({
       message: "Name and email are required",
@@ -97,8 +107,8 @@ router.get("/", (req: Request, res: Response) => {
  *                   type: string
  *                   example: Name and email are required
  */
-router.post("/", validateUsers, (req: Request, res: Response) => {
-  const newUser = req.body;
+router.post("/", validateUsers, (req: RequestWithUser, res: Response) => {
+  const newUser: CreateUserDto | UpdateUserDto = req.body;
   res.status(201).json({
     message: "Received POST",
     data: newUser,
