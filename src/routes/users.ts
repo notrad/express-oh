@@ -1,7 +1,13 @@
 import type { Request, Response, NextFunction } from "express";
 import { Router } from "express";
 import { userModelRateLimit } from "../common/constants/rateLimitOptions";
-import type { User, CreateUserDto, UpdateUserDto } from "../types/User";
+import type {
+  User,
+  CreateUserDto,
+  UpdateUserDto,
+  UserResponse,
+} from "../types/User";
+import type { ApiResponse } from "../types/Api";
 
 interface RequestWithUser extends Request {
   body: CreateUserDto | UpdateUserDto;
@@ -18,8 +24,9 @@ const validateUsers = (
   const { name, email } = req.body as CreateUserDto;
   if (!name || !email) {
     return res.status(400).json({
+      status: "error",
       message: "Name and email are required",
-    });
+    } as ApiResponse);
   }
   next();
 };
@@ -107,12 +114,16 @@ router.get("/", (req: Request, res: Response) => {
  *                   type: string
  *                   example: Name and email are required
  */
-router.post("/", validateUsers, (req: RequestWithUser, res: Response) => {
-  const newUser: CreateUserDto | UpdateUserDto = req.body;
-  res.status(201).json({
-    message: "Received POST",
-    data: newUser,
-  });
+router.post("/", validateUsers, (req: Request, res: Response) => {
+  const newUser: CreateUserDto = req.body;
+  const response: ApiResponse<UserResponse> = {
+    status: "success",
+    data: {
+      id: "1",
+      ...newUser,
+    },
+  };
+  res.json(response);
 });
 
 /**
@@ -170,7 +181,7 @@ router.post("/", validateUsers, (req: RequestWithUser, res: Response) => {
  *                   example: Name and email are required
  */
 router.put("/:id", validateUsers, (req: Request, res: Response) => {
-  const userId = req.params.id;
+  const userId: string = req.params.id;
   const updatedFields = req.body;
   res.json({
     message: `Received PATCH for ${userId}`,
@@ -220,7 +231,7 @@ router.put("/:id", validateUsers, (req: Request, res: Response) => {
  *                   type: object
  */
 router.patch("/:id", (req: Request, res: Response) => {
-  const userId = req.params.id;
+  const userId: string = req.params.id;
   const updatedFields = req.body;
   res.json({
     message: `Received a PATCH HTTP method for user ${userId}`,
@@ -256,7 +267,7 @@ router.patch("/:id", (req: Request, res: Response) => {
  *                   example: Received a DELETE for 123
  */
 router.delete("/:id", (req: Request, res: Response) => {
-  const userId = req.params.id;
+  const userId: string = req.params.id;
   res.json({
     message: `Received a DELETE for ${userId}`,
   });
