@@ -1,0 +1,15 @@
+doctype html
+html
+    head
+        title Express, Oh! - #{title}
+        link(rel='stylesheet', href='/static/css/styles.css')
+    body
+        header
+            nav 
+                a(href='/') Home
+                a(href='/users') Users 
+                a(href="/api-docs") API Docs
+    main 
+        block content 
+    footer 
+        p &copy; 2025 Express, Oh!

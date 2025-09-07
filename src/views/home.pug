@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1=title
+    p Welcome to #{title}
+
+    section.api-status
+        h2 API Status
+        .status-card
+            h3 System Status
+            p Status: #{health.status}
+            p Uptime: #{health.uptime} seconds

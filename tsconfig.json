@@ -11,6 +11,6 @@
     "moduleResolution": "node",
     "sourceMap": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*","src/view/**/*","src/public/**/*"],
   "exclude": ["node_modules","dist","coverage"]
 }
