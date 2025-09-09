@@ -1,0 +1,14 @@
+export interface AppConfig {
+    port: number;
+    nodeEnv: string;
+    corsOrigin: string;
+    apiPrefix: string;
+    viewEngine: {
+        engine: string;
+        viewsDir: string;
+    };
+    staticFiles: {
+        route: string;
+        dir: string;
+    }
+}
