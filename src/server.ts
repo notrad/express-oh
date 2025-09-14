@@ -1,16 +1,16 @@
 import createApp from "./app";
-import { config, validateConfig } from "./config/config";
+import { appConfig, validateConfig } from "./config/config";
 
 const startServer = async () => {
   try {
     validateConfig();
     const app = createApp();
 
-    app.listen(config.port, () => {
-      console.log(`Server is running on port ${config.port}`);
-      console.log(`Environment: ${config.nodeEnv}`);
+    app.listen(appConfig.port, () => {
+      console.log(`Server is running on port ${appConfig.port}`);
+      console.log(`Environment: ${appConfig.nodeEnv}`);
       console.log(
-        `Documentations available at: http://localhost:${config.port}/api-docs`,
+        `Documentations available at: http://localhost:${appConfig.port}/api-docs`,
       );
     });
   } catch (error) {

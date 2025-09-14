@@ -3,16 +3,19 @@ import express from "express";
 import path from "path";
 import morgan from "morgan";
 import cors from "cors";
-import { appConfig } from "../../config/configuration";
+import { appConfig } from "../../config/config";
 import { devCorsOptions } from "../constants/corsOptions";
 
 export const bootStrapApplication = (app: Express): void => {
-  app.set("views", path.join(__dirname, "..", appConfig.viewEngine.viewsDir));
+  app.set(
+    "views",
+    path.join(__dirname, "../../", appConfig.viewEngine.viewsDir),
+  );
   app.set("view engine", appConfig.viewEngine.engine);
 
   app.use(
     appConfig.staticFiles.route,
-    express.static(path.join(__dirname, "..", appConfig.staticFiles.dir)),
+    express.static(path.join(__dirname, "../..", appConfig.staticFiles.dir)),
   );
 
   app.use(morgan("dev"));
