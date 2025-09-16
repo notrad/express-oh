@@ -1,18 +1,15 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Response, NextFunction } from "express";
 import { Router } from "express";
 import { userModelRateLimit } from "../common/constants/rateLimitOptions";
-import type {
-  User,
-  CreateUserDto,
-  UpdateUserDto,
-  UserResponse,
-} from "../types/User";
+import type { CreateUserDto, RequestWithUser } from "../types/User";
 import type { ApiResponse } from "../types/Api";
-
-interface RequestWithUser extends Request {
-  body: CreateUserDto | UpdateUserDto;
-  user?: User;
-}
+import {
+  deleteUser,
+  getUser,
+  patchUser,
+  postUser,
+  putUser,
+} from "../controllers/userController";
 
 const router = Router();
 
@@ -59,9 +56,7 @@ router.use(userModelRateLimit);
  *                   type: string
  *                   example: Received GET
  */
-router.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Received GET" });
-});
+router.get("/", getUser);
 
 /**
  * @openapi
@@ -114,17 +109,7 @@ router.get("/", (req: Request, res: Response) => {
  *                   type: string
  *                   example: Name and email are required
  */
-router.post("/", validateUsers, (req: Request, res: Response) => {
-  const newUser: CreateUserDto = req.body;
-  const response: ApiResponse<UserResponse> = {
-    status: "success",
-    data: {
-      id: "1",
-      ...newUser,
-    },
-  };
-  res.json(response);
-});
+router.post("/", validateUsers, postUser);
 
 /**
  * @openapi
@@ -180,14 +165,7 @@ router.post("/", validateUsers, (req: Request, res: Response) => {
  *                   type: string
  *                   example: Name and email are required
  */
-router.put("/:id", validateUsers, (req: Request, res: Response) => {
-  const userId: string = req.params.id;
-  const updatedFields = req.body;
-  res.json({
-    message: `Received PATCH for ${userId}`,
-    data: updatedFields,
-  });
-});
+router.put("/:id", validateUsers, putUser);
 
 /**
  * @openapi
@@ -230,14 +208,7 @@ router.put("/:id", validateUsers, (req: Request, res: Response) => {
  *                 data:
  *                   type: object
  */
-router.patch("/:id", (req: Request, res: Response) => {
-  const userId: string = req.params.id;
-  const updatedFields = req.body;
-  res.json({
-    message: `Received a PATCH HTTP method for user ${userId}`,
-    data: updatedFields,
-  });
-});
+router.patch("/:id", patchUser);
 
 /**
  * @openapi
@@ -266,11 +237,6 @@ router.patch("/:id", (req: Request, res: Response) => {
  *                   type: string
  *                   example: Received a DELETE for 123
  */
-router.delete("/:id", (req: Request, res: Response) => {
-  const userId: string = req.params.id;
-  res.json({
-    message: `Received a DELETE for ${userId}`,
-  });
-});
+router.delete("/:id", deleteUser);
 
 export default router;
