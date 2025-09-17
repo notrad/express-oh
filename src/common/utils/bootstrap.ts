@@ -3,10 +3,13 @@ import express from "express";
 import path from "path";
 import morgan from "morgan";
 import cors from "cors";
+import compression from "compression";
 import { appConfig } from "../../config/config";
 import { devCorsOptions } from "../constants/corsOptions";
 
 export const bootStrapApplication = (app: Express): void => {
+  app.use(compression());
+
   app.set(
     "views",
     path.join(__dirname, "../../", appConfig.viewEngine.viewsDir),
