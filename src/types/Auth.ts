@@ -23,5 +23,6 @@ export interface LoginResponse {
 }
 
 export interface AuthenticatedRequest extends Request {
+  req: any;
   user?: JwtPayload;
 }
