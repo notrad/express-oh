@@ -1,8 +1,6 @@
 import type { Response, NextFunction } from "express";
-import { Request } from "express";
-import type { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
-import type { AuthenticatedRequest, UserRole } from "../types/Auth";
+import type { AuthenticatedRequest, UserRole, JwtPayload } from "../types/Auth";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
 
@@ -11,7 +9,7 @@ export const authenticate = (
   res: Response,
   next: NextFunction,
 ) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return res.status(401).json({
       status: "error",
