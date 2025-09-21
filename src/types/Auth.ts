@@ -1,7 +1,7 @@
 export interface JwtPayload {
   userId: string;
   email: string;
-  roles: UserRole[];
+  roles: readonly UserRole[];
   iat?: number;
   exp?: number;
 }
@@ -18,7 +18,7 @@ export interface LoginResponse {
   user: {
     id: string;
     email: string;
-    roles: UserRole[];
+    roles: readonly UserRole[];
   };
 }
 
