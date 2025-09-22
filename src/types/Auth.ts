@@ -1,3 +1,4 @@
+import type { Request } from "express";
 export interface JwtPayload {
   userId: string;
   email: string;

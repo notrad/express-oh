@@ -9,7 +9,7 @@ export const authenticate = (
   res: Response,
   next: NextFunction,
 ) => {
-  const authHeader = req.headers.get("authorization");
+  const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
     return res.status(401).json({
       status: "error",
