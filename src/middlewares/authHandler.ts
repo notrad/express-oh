@@ -1,12 +1,12 @@
 import type { Response, NextFunction } from "express";
-import { generateToken, login, verifyToken } from "../services/authService";
+import { verifyToken } from "../services/authService";
 import type { AuthenticatedRequest, UserRole } from "../types/Auth";
 
-export async function authenticate(
+export const authenticate = async (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction,
-) {
+) => {
   try {
     const token = extractTokenFromHeader(req);
     if (!token) {
@@ -25,9 +25,9 @@ export async function authenticate(
       message: "Invalid token",
     });
   }
-}
+};
 
-export async function authorize(...roles: UserRole[]) {
+export const authorize = async (...roles: UserRole[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
       return res.status(401).json({
@@ -47,13 +47,13 @@ export async function authorize(...roles: UserRole[]) {
 
     next();
   };
-}
+};
 
-function extractTokenFromHeader(req: AuthenticatedRequest): string | null {
+const extractTokenFromHeader = (req: AuthenticatedRequest): string | null => {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
     return null;
   }
 
   return authHeader.split(" ")[1];
-}
+};

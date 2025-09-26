@@ -4,30 +4,30 @@ import bcrypt from "bcrypt";
 import { authConfig } from "../config/authConfig";
 import type { JwtPayload, LoginDto, LoginResponse } from "../types/Auth";
 
-export async function generateToken(
+export const generateToken = async (
   payload: Omit<JwtPayload, "iat" | "exp">,
-): Promise<string> {
+): Promise<string> => {
   return jwt.sign(payload, Buffer.from(authConfig.jwt.secret, "utf-8"), {
     expiresIn: authConfig.jwt.expiresIn,
   } as SignOptions);
-}
+};
 
-export async function verifyToken(token: string): Promise<JwtPayload> {
+export const verifyToken = async (token: string): Promise<JwtPayload> => {
   return jwt.verify(token, authConfig.jwt.secret) as JwtPayload;
-}
+};
 
-export async function hashPassword(password: string): Promise<string> {
+export const hashPassword = async (password: string): Promise<string> => {
   return bcrypt.hash(password, authConfig.passwordHash.saltRounds);
-}
+};
 
-export async function comparePasswords(
+export const comparePasswords = async (
   password: string,
   hashPassword: string,
-): Promise<boolean> {
+): Promise<boolean> => {
   return bcrypt.compare(password, hashPassword);
-}
+};
 
-export async function login(credentials: LoginDto): Promise<LoginResponse> {
+export const login = async (credentials: LoginDto): Promise<LoginResponse> => {
   // TODO: Replace with actual user lookup from database
   const mockUser = {
     id: "1",
@@ -59,4 +59,4 @@ export async function login(credentials: LoginDto): Promise<LoginResponse> {
       roles: mockUser.roles,
     },
   };
-}
+};

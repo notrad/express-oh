@@ -1,14 +1,14 @@
 import type { Request, Response } from "express";
 
-export function getHealth(req: Request, res: Response): void {
+export const getHealth = (req: Request, res: Response): void => {
   res.status(200).json({
     status: "UP",
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
-}
+};
 
-export function getHealthDetailed(req: Request, res: Response) {
+export const getHealthDetailed = (req: Request, res: Response) => {
   try {
     const healthCheck = {
       status: "UP",
@@ -55,4 +55,4 @@ export function getHealthDetailed(req: Request, res: Response) {
       error: "Health check failed",
     });
   }
-}
+};
