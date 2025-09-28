@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login } from "../controllers/authController";
+import { logIn } from "../controllers/authController";
 
 const router = Router();
 
@@ -61,6 +61,6 @@ const router = Router();
  *                           items:
  *                             type: string
  */
-router.post("/login", login);
+router.post("/login", logIn);
 
 export default router;
