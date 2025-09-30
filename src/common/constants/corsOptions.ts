@@ -18,7 +18,7 @@ const allowedHeaders: string[] = [
 ];
 
 export const devCorsOptions: CorsOptions = {
-  origin: ["http://locahost:3000"],
+  origin: ["http://localhost:3000", "http://localhost:5173"],
   optionsSuccessStatus: 200,
   methods: allowedMethods,
   allowedHeaders: allowedHeaders,
