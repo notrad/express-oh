@@ -6,6 +6,25 @@ import cors from "cors";
 import compression from "compression";
 import { appConfig } from "../../config/config";
 import { devCorsOptions } from "../constants/corsOptions";
+import { dbConfig } from "../../config/config";
+import type { Database } from "../../database/interfaces/Database";
+import { databaseFactory } from "../../database/DatabaseFactory";
+
+let db: Database;
+
+export const initializeDatabase = async (): Promise<Database> => {
+  const database = databaseFactory("postgres", dbConfig);
+  await database.connect();
+  db = database;
+  return database;
+};
+
+export const getDatabase = (): Database => {
+  if (!db) {
+    throw new Error("Database not initialize");
+  }
+  return db;
+};
 
 export const bootStrapApplication = (app: Express): void => {
   app.use(
