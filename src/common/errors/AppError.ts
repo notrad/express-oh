@@ -8,3 +8,9 @@ export class AppError extends Error {
     Object.setPrototypeOf(this, AppError.prototype);
   }
 }
+
+export class NotFondError extends AppError {
+  constructor(message = "Resource not found") {
+    super(404, message);
+  }
+}
