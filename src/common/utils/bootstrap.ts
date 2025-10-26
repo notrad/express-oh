@@ -13,15 +13,20 @@ import { databaseFactory } from "../../database/DatabaseFactory";
 let db: Database;
 
 export const initializeDatabase = async (): Promise<Database> => {
-  const database = databaseFactory("postgres", dbConfig);
-  await database.connect();
-  db = database;
-  return database;
+  try {
+    const database = databaseFactory("postgres", dbConfig);
+    await database.connect();
+    db = database;
+    return database;
+  } catch (error) {
+    console.error("Failed to initialize database:", error);
+    throw error;
+  }
 };
 
 export const getDatabase = (): Database => {
   if (!db) {
-    throw new Error("Database not initialize");
+    throw new Error("Database not initialized");
   }
   return db;
 };
@@ -35,7 +40,6 @@ export const bootStrapApplication = (app: Express): void => {
         if (req.headers["x-no-compression"]) {
           return false;
         }
-
         return compression.filter(req, res);
       },
     }),
@@ -55,4 +59,16 @@ export const bootStrapApplication = (app: Express): void => {
   app.use(morgan("dev"));
   app.use(cors(devCorsOptions));
   app.use(express.json());
+};
+
+export const gracefulShutdown = async (): Promise<void> => {
+  console.log("Initiating graceful shutdown...");
+  try {
+    if (db) {
+      await db.disconnect();
+      console.log("Database connection closed");
+    }
+  } catch (error) {
+    console.error("Error during shutdown:", error);
+  }
 };
