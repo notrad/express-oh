@@ -1,6 +1,6 @@
 import createApp from "./app";
 import { appConfig, validateConfig } from "./config/config";
-import { getDatabase, initializeDatabase } from "./common/utils/bootstrap";
+import { initializeDatabase, gracefulShutdown } from "./common/utils/bootstrap";
 
 const startServer = async () => {
   try {
@@ -10,7 +10,7 @@ const startServer = async () => {
 
     const app = createApp();
 
-    app.listen(appConfig.port, () => {
+    const server = app.listen(appConfig.port, () => {
       console.log(`Server is running on port ${appConfig.port}`);
       console.log(`Environment: ${appConfig.nodeEnv}`);
       console.log(
@@ -18,14 +18,15 @@ const startServer = async () => {
       );
     });
 
-    const gracefulShutdown = async () => {
-      const db = getDatabase();
-      await db.disconnect();
-      process.exit(0);
-    };
+    process.on("SIGTERM", async () => {
+      await gracefulShutdown();
+      server.close(() => process.exit(0));
+    });
 
-    process.on("SIGTERM", gracefulShutdown);
-    process.on("SIGINT", gracefulShutdown);
+    process.on("SIGINT", async () => {
+      await gracefulShutdown();
+      server.close(() => process.exit(0));
+    });
   } catch (error) {
     console.error("Failed to start server:", error);
     process.exit(1);
