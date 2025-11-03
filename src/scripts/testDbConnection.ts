@@ -1,10 +1,13 @@
-import { initializeDatabase } from "../common/utils/bootstrap";
+import {
+  gracefulShutdown,
+  initializeDatabase,
+} from "../common/utils/bootstrap";
 
 async function testConnection() {
   try {
-    const db = await initializeDatabase();
+    await initializeDatabase();
     console.log("Successfully connected to the database");
-    await db.disconnect();
+    await gracefulShutdown();
   } catch (error) {
     console.error("Connection test failed:", error);
   }

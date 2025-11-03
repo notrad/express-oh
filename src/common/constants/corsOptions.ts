@@ -23,11 +23,3 @@ export const devCorsOptions: CorsOptions = {
   methods: allowedMethods,
   allowedHeaders: allowedHeaders,
 };
-
-export const preProdCorsOptions: CorsOptions = {};
-
-export const prodCorsOptions: CorsOptions = {};
-
-export const readOnlyCorsOptions: CorsOptions = {
-  methods: ["GET"],
-};

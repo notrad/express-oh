@@ -1,7 +1,7 @@
 import type { Response, NextFunction } from "express";
 import { Router } from "express";
 import { userModelRateLimit } from "../common/constants/rateLimitOptions";
-import type { CreateUserDto, RequestWithUser } from "../types/User";
+import type { CreateUserDto } from "../types/User";
 import type { ApiResponse } from "../types/Api";
 import {
   deleteUser,
@@ -10,11 +10,12 @@ import {
   postUser,
   putUser,
 } from "../controllers/userController";
+import type { AuthenticatedRequest } from "../types/Auth";
 
 const router = Router();
 
 const validateUsers = (
-  req: RequestWithUser,
+  req: AuthenticatedRequest,
   res: Response,
   next: NextFunction,
 ) => {
