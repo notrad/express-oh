@@ -8,16 +8,12 @@ import { appConfig } from "../../config/config";
 import { devCorsOptions } from "../constants/corsOptions";
 import { dbConfig } from "../../config/config";
 import type { Database } from "../../database/interfaces/Database";
-import { databaseFactory } from "../../database/DatabaseFactory";
+import { DatabaseManager } from "../../database/DatabaseManager";
 
-let db: Database;
-
-export const initializeDatabase = async (): Promise<Database> => {
+export const initializeDatabase = async (): Promise<void> => {
   try {
-    const database = databaseFactory("postgres", dbConfig);
-    await database.connect();
-    db = database;
-    return database;
+    const dbManager = DatabaseManager.getInstance();
+    await dbManager.initialize("postgres", dbConfig);
   } catch (error) {
     console.error("Failed to initialize database:", error);
     throw error;
@@ -25,10 +21,7 @@ export const initializeDatabase = async (): Promise<Database> => {
 };
 
 export const getDatabase = (): Database => {
-  if (!db) {
-    throw new Error("Database not initialized");
-  }
-  return db;
+  return DatabaseManager.getInstance().getDatabase();
 };
 
 export const bootStrapApplication = (app: Express): void => {
@@ -64,10 +57,8 @@ export const bootStrapApplication = (app: Express): void => {
 export const gracefulShutdown = async (): Promise<void> => {
   console.log("Initiating graceful shutdown...");
   try {
-    if (db) {
-      await db.disconnect();
-      console.log("Database connection closed");
-    }
+    await DatabaseManager.getInstance().disconnect();
+    console.log("Database connection closed");
   } catch (error) {
     console.error("Error during shutdown:", error);
   }
