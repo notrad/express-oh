@@ -9,8 +9,3 @@ export interface HealthCheckResponse {
   };
   version?: string;
 }
-
-export interface ServiceHealth {
-  status: "up" | "down";
-  latency: number;
-}
