@@ -22,6 +22,21 @@ export class UserRepository {
     return users[0];
   }
 
+  async update(id: string, user: Partial<User>): Promise<User | undefined> {
+    const setClause = Object.keys(user)
+      .map((key, index) => `${key} = ${index + 2}`)
+      .join(", ");
+
+    const values = [id, ...Object.values(user)];
+
+    const users = await this.db.query<User>(
+      `UPDATE users SET ${setClause} WHERE id = $1 RETURNING *`,
+      values,
+    );
+
+    return users[0];
+  }
+
   async delete(id: string): Promise<void> {
     await this.db.execute("DELETE FROM users WHERE id=$1", [id]);
   }
