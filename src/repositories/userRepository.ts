@@ -2,10 +2,23 @@ import type { Database } from "../database/interfaces/Database";
 import type { User } from "../types/User";
 
 export class UserRepository {
-  constructor(private db: Database) {}
+  private static instance: UserRepository;
+  private database: Database;
+
+  private constructor(database: Database) {
+    this.database = database;
+  }
+
+  static getInstance(database: Database): UserRepository {
+    if (!UserRepository.instance) {
+      UserRepository.instance = new UserRepository(database);
+    }
+
+    return UserRepository.instance;
+  }
 
   async findById(id: string): Promise<User | undefined> {
-    const users = await this.db.query<User>(
+    const users = await this.database.query<User>(
       "SELECT * FROM users WHERE id = $1",
       [id],
     );
@@ -14,7 +27,7 @@ export class UserRepository {
   }
 
   async create(user: Omit<User, "id">): Promise<User> {
-    const users = await this.db.query<User>(
+    const users = await this.database.query<User>(
       "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
       [user.name, user.email, user.password],
     );
@@ -29,7 +42,7 @@ export class UserRepository {
 
     const values = [id, ...Object.values(user)];
 
-    const users = await this.db.query<User>(
+    const users = await this.database.query<User>(
       `UPDATE users SET ${setClause} WHERE id = $1 RETURNING *`,
       values,
     );
@@ -38,11 +51,11 @@ export class UserRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await this.db.execute("DELETE FROM users WHERE id=$1", [id]);
+    await this.database.execute("DELETE FROM users WHERE id=$1", [id]);
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
-    const users = await this.db.query<User>(
+    const users = await this.database.query<User>(
       "SELECT * FROM users WHERE email = $1",
       [email],
     );

@@ -1,9 +1,36 @@
 import type { Request, Response } from "express";
 import type { CreateUserDto, UserResponse } from "../types/User";
 import type { ApiResponse } from "../types/Api";
+import * as userService from "../services/userService";
 
-export const getUser = (req: Request, res: Response) => {
-  res.json({ message: "Received GET" });
+export const getUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const user = await userService.findUserById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+
+    const response: ApiResponse<UserResponse> = {
+      status: "success",
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    };
+
+    res.json(response);
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    });
+  }
 };
 
 export const postUser = (req: Request, res: Response) => {
