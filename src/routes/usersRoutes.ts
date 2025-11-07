@@ -57,7 +57,7 @@ router.use(userModelRateLimit);
  *                   type: string
  *                   example: Received GET
  */
-router.get("/", getUser);
+router.get("/:id", getUser);
 
 /**
  * @openapi

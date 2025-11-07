@@ -10,6 +10,9 @@ export interface User {
 export interface CreateUserDto {
   name: string;
   email: string;
+  password: string;
+  createAt: Date;
+  updateAt: Date;
 }
 
 export interface UpdateUserDto {
