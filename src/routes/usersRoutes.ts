@@ -4,7 +4,7 @@ import { userModelRateLimit } from "../common/constants/rateLimitOptions";
 import type { CreateUserDto } from "../types/User";
 import type { ApiResponse } from "../types/Api";
 import {
-  deleteUser,
+  removeUser,
   getUser,
   patchUser,
   postUser,
@@ -238,6 +238,6 @@ router.patch("/:id", patchUser);
  *                   type: string
  *                   example: Received a DELETE for 123
  */
-router.delete("/:id", deleteUser);
+router.delete("/:id", removeUser);
 
 export default router;
