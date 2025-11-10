@@ -28,7 +28,7 @@ export class UserRepository {
 
   async create(user: Omit<User, "id">): Promise<User> {
     const users = await this.database.query<User>(
-      "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
+      "INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING *",
       [user.name, user.email, user.password],
     );
 
