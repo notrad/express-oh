@@ -8,13 +8,16 @@ export const swaggerSpec = swaggerJSDoc({
       version: "1.0.0",
       description: "API documentation for Express, Oh! application",
     },
-    servers: [
-      {
-        url: "http://localhost:3000/",
-        description: "Development server",
-      },
-    ],
     components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          description:
+            "Enter your Bearer token in the format **Bearer <token>**",
+        },
+      },
       schemas: {
         User: {
           type: "object",

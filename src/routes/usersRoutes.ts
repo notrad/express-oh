@@ -42,6 +42,8 @@ router.use(userModelRateLimit);
  * @openapi
  * /users:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Create a new user
  *     tags: [Users]
  *     requestBody:
@@ -78,6 +80,32 @@ router.use(userModelRateLimit);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized - Invalid or missing bearer token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: Unauthorized
+ *       403:
+ *         description: Forbidden - Invalid permissions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: error
+ *                 message:
+ *                   type: string
+ *                   example: Forbidden
  *       500:
  *         description: Server error
  *         content:
@@ -87,6 +115,8 @@ router.use(userModelRateLimit);
  *
  * /users/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get user by ID
  *     tags: [Users]
  *     parameters:
@@ -117,6 +147,8 @@ router.use(userModelRateLimit);
  *               $ref: '#/components/schemas/Error'
  *
  *   put:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Update user completely
  *     tags: [Users]
  *     parameters:
@@ -146,6 +178,8 @@ router.use(userModelRateLimit);
  *                   $ref: '#/components/schemas/User'
  *
  *   patch:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Update user partially
  *     tags: [Users]
  *     parameters:
@@ -180,6 +214,8 @@ router.use(userModelRateLimit);
  *                   $ref: '#/components/schemas/User'
  *
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Delete user
  *     tags: [Users]
  *     parameters:

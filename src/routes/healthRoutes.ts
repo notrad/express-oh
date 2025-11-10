@@ -14,6 +14,7 @@ const router = Router();
  * @openapi
  * /health:
  *   get:
+ *     security: []  # This explicitly removes security requirements
  *     summary: Basic health check
  *     description: Returns the liveness status, current timestamp, and process uptime.
  *     tags: [Health]
@@ -44,6 +45,7 @@ router.get("/", getHealth);
  * @openapi
  * /health/detailed:
  *   get:
+ *     security: []  # This explicitly removes security requirements
  *     summary: Detailed health check
  *     description: Returns detailed system and service information. Responds with 503 if any dependency is down.
  *     tags: [Health]
