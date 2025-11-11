@@ -37,7 +37,7 @@ export class UserRepository {
 
   async update(id: string, user: Partial<User>): Promise<User | undefined> {
     const setClause = Object.keys(user)
-      .map((key, index) => `${key} = ${index + 2}`)
+      .map((key, index) => `${key} = $${index + 2}`)
       .join(", ");
 
     const values = [id, ...Object.values(user)];
