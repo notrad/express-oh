@@ -1,8 +1,11 @@
+import type { UserRole } from "./Auth";
+
 export interface User {
   id: string;
   name: string;
   email: string;
-  password: string;
+  password_hash: string;
+  roles: UserRole[];
   createAt: Date;
   updateAt: Date;
 }
@@ -10,7 +13,8 @@ export interface User {
 export interface CreateUserDto {
   name: string;
   email: string;
-  password: string;
+  password_hash: string;
+  roles: UserRole[];
   createAt: Date;
   updateAt: Date;
 }

@@ -3,8 +3,13 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { authConfig } from "../config/authConfig";
 import type { JwtPayload, LoginDto, LoginResponse } from "../types/Auth";
+import { UserRepository } from "../repositories/userRepository";
+import { getDatabase } from "../common/utils/bootstrap";
+import type { User } from "../types/User";
 
-export const generateToken = async (
+const userRepository = () => UserRepository.getInstance(getDatabase());
+
+const generateToken = async (
   payload: Omit<JwtPayload, "iat" | "exp">,
 ): Promise<string> => {
   return jwt.sign(payload, Buffer.from(authConfig.jwt.secret, "utf-8"), {
@@ -16,11 +21,7 @@ export const verifyToken = async (token: string): Promise<JwtPayload> => {
   return jwt.verify(token, authConfig.jwt.secret) as JwtPayload;
 };
 
-export const hashPassword = async (password: string): Promise<string> => {
-  return bcrypt.hash(password, authConfig.passwordHash.saltRounds);
-};
-
-export const comparePasswords = async (
+const comparePasswords = async (
   password: string,
   hashPassword: string,
 ): Promise<boolean> => {
@@ -28,25 +29,21 @@ export const comparePasswords = async (
 };
 
 export const login = async (credentials: LoginDto): Promise<LoginResponse> => {
-  // TODO: Replace with actual user lookup from database
-  const mockUser = {
-    id: "1",
-    email: "admin@example.com",
-    password: await hashPassword("admin123"),
-    roles: ["admin"] as const,
-  };
+  const fetchedUser = await findUserByEmail(credentials.email);
+
+  console.log(fetchedUser);
 
   if (
-    credentials.email !== mockUser.email ||
-    !(await comparePasswords(credentials.password, mockUser.password))
+    credentials.email !== fetchedUser?.email ||
+    !(await comparePasswords(credentials.password, fetchedUser.password_hash))
   ) {
     throw new Error("Invalid credentials");
   }
 
   const payload: JwtPayload = {
-    userId: mockUser.id,
-    email: mockUser.email,
-    roles: mockUser.roles,
+    userId: fetchedUser.id,
+    email: fetchedUser.email,
+    roles: fetchedUser.roles,
   };
 
   const token = await generateToken(payload);
@@ -54,9 +51,13 @@ export const login = async (credentials: LoginDto): Promise<LoginResponse> => {
   return {
     token,
     user: {
-      id: mockUser.id,
-      email: mockUser.email,
-      roles: mockUser.roles,
+      id: fetchedUser.id,
+      email: fetchedUser.email,
+      roles: fetchedUser.roles,
     },
   };
+};
+
+const findUserByEmail = async (email: string): Promise<User | undefined> => {
+  return userRepository().findByEmail(email);
 };
