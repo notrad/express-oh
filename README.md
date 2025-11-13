@@ -1,20 +1,20 @@
 # Express-oh
 
-A robust Express.js application built with TypeScript, featuring comprehensive API documentation and security features.
+A robust Express.js application built with TypeScript, featuring comprehensive API documentation, authentication, and modern security best practices.
 
 ## Features
 
-- 🚀 Express.js with TypeScript
-- 📚 Swagger API documentation
-- 🔒 Authentication with JWT
-- 🛡️ Rate limiting
-- 🗜️ Response compression
-- 🔍 Input validation with Joi
-- 📝 Logging with Morgan
-- 🎨 Template engine with Pug
-- ✨ Code formatting with Prettier
-- 🔍 Linting with ESLint
-- 🐶 Git hooks with Husky
+- 🚀 **Express.js** with TypeScript
+- 📚 **Swagger** API documentation (`/api-docs`)
+- 🔒 **JWT Authentication**
+- 🛡️ **Rate Limiting**
+- 🗜️ **Response Compression**
+- 🔍 **Input Validation** with Joi
+- 📝 **Logging** with Morgan
+- 🎨 **Template Engine** with Pug
+- ✨ **Code Formatting** with Prettier
+- 🔍 **Linting** with ESLint
+- 🐶 **Git Hooks** with Husky
 
 ## Prerequisites
 
@@ -26,9 +26,12 @@ A robust Express.js application built with TypeScript, featuring comprehensive A
 ```bash
 # Clone the repository
 git clone <repository-url>
+cd express-oh
 
 # Install dependencies
 npm install
+# or
+yarn install
 ```
 
 ## Environment Variables
@@ -38,56 +41,52 @@ Create a `.env` file in the root directory with the following variables:
 ```env
 NODE_ENV=development
 PORT=3000
-API_PREFIX=/api/v1
+JWT_SECRET=your_jwt_secret
+DATABASE_URL=your_database_url
 ```
 
-## Scripts
+## Usage
+
+### Development
 
 ```bash
-# Development with hot-reload
-npm run dev
-
-# Build the project
 npm run build
-
-# Start production server
-npm run start
-
-# Lint code
-npm run lint
-
-# Fix linting issues
-npm run lint:fix
+npm start
 ```
+
+### Linting & Formatting
+
+```bash
+npm run lint        # Lint code
+npm run lint:fix    # Lint and fix issues
+```
+
+### Testing
+
+_Coming soon!_
 
 ## API Documentation
 
-Once the server is running, you can access:
-
-- Swagger UI: `http://localhost:3000/api-docs`
-- OpenAPI JSON: `http://localhost:3000/openai.json`
+Swagger UI is available at: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
 
 ## Project Structure
 
 ```
 src/
-├── config/         # Configuration files
-├── middlewares/    # Express middlewares
-├── routes/         # API routes
-├── swagger/        # Swagger documentation
-├── common/         # Shared utilities
-├── app.ts         # Express app setup
-└── server.ts      # Server entry point
+  controllers/    # Route controllers
+  middlewares/    # Express middlewares (auth, error handling, etc.)
+  repositories/   # Data access layer
+  routes/         # Express route definitions
+  services/       # Business logic
+  types/          # TypeScript types/interfaces
+  config/         # Configuration files
+  common/         # Utilities and helpers
 ```
 
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
 
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
+[ISC](LICENSE)
