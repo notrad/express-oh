@@ -37,7 +37,9 @@ export const authorize = async (...roles: UserRole[]) => {
       });
     }
 
-    const hasRole = req.user.roles.some((role) => roles.includes(role));
+    const hasRole = false;
+
+    // const hasRole = req.user.roles.some((role) => roles.includes(role));
 
     if (!hasRole) {
       return res.status(403).json({

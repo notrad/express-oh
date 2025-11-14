@@ -1,38 +1,52 @@
-import { getDatabase } from "../common/utils/bootstrap";
 import { authConfig } from "../config/authConfig";
-import { UserRepository } from "../repositories/userRepository";
-import type { User } from "../types/User";
+import type { User, UserEntity } from "../types/User";
 import bcrypt from "bcrypt";
+import { prisma } from "../prisma/prismaClient";
 
-const userRepository = () => UserRepository.getInstance(getDatabase());
-
-export const findUserById = async (id: string): Promise<User | undefined> => {
-  return await userRepository().findById(id);
+export const findUserById = async (id: string): Promise<UserEntity | null> => {
+  return prisma.user.findUnique({ where: { id } })
 };
 
-export const createUser = async (user: Omit<User, "id">): Promise<User> => {
-  user.password_hash = await hashPassword(user.password_hash);
-  return await userRepository().create(user);
+export const createUser = async (user: Omit<User, "id">): Promise<UserEntity | null> => {
+  const passwordHash = await hashPassword(user.password);
+  return prisma.user.create({
+    data: {
+      name: user.name,
+      email: user.email,
+      passwordHash,
+      roles: user.roles
+    }
+  });
 };
 
 export const updateUser = async (
   id: string,
   user: Partial<User>,
-): Promise<User | undefined> => {
-  if (user.password_hash) {
-    user.password_hash = await hashPassword(user.password_hash);
+): Promise<UserEntity | null> => {
+  let passwordHash;
+  if (user.password) {
+    passwordHash = await hashPassword(user.password);
   }
-  return await userRepository().update(id, user);
+
+  return prisma.user.update({
+    where: { id },
+    data: {
+      name: user.name,
+      email: user.email,
+      passwordHash: passwordHash,
+      roles: user.roles
+    }
+  });
 };
 
 export const deleteUser = async (id: string): Promise<void> => {
-  await userRepository().delete(id);
+  await prisma.user.delete({ where: { id } });
 };
 
 export const findUserByEmail = async (
   email: string,
-): Promise<User | undefined> => {
-  return await userRepository().findByEmail(email);
+): Promise<UserEntity | null> => {
+  return prisma.user.findUnique({ where: { email } });
 };
 
 const hashPassword = async (password: string): Promise<string> => {
