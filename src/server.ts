@@ -7,7 +7,7 @@ const startServer = async () => {
 
     const app = createApp();
 
-    const server = app.listen(appConfig.port, () => {
+    app.listen(appConfig.port, () => {
       console.log(`Server is running on port ${appConfig.port}`);
       console.log(`Environment: ${appConfig.nodeEnv}`);
       console.log(

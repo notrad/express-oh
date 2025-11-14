@@ -1,12 +1,12 @@
 import type { UserRole } from "./Auth";
-export interface UserEntity { 
-  id: string; 
-  name: string; 
-  email: string; 
-  roles: string[]; 
-  passwordHash: string; 
-  createdAt: Date; 
-  updatedAt: Date; 
+export interface UserEntity {
+  id: string;
+  name: string;
+  email: string;
+  roles: string[];
+  passwordHash: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface User {

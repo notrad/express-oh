@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { authConfig } from "../config/authConfig";
 import type { JwtPayload, LoginDto, LoginResponse } from "../types/Auth";
-import type { User, UserEntity } from "../types/User";
+import type { UserEntity } from "../types/User";
 import { prisma } from "../prisma/prismaClient";
 
 const generateToken = async (
@@ -54,5 +54,5 @@ export const login = async (credentials: LoginDto): Promise<LoginResponse> => {
 };
 
 const findUserByEmail = async (email: string): Promise<UserEntity | null> => {
-  return prisma.user.findUnique({where: {email}})
+  return prisma.user.findUnique({ where: { email } });
 };

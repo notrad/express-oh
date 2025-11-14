@@ -4,18 +4,20 @@ import bcrypt from "bcrypt";
 import { prisma } from "../prisma/prismaClient";
 
 export const findUserById = async (id: string): Promise<UserEntity | null> => {
-  return prisma.user.findUnique({ where: { id } })
+  return prisma.user.findUnique({ where: { id } });
 };
 
-export const createUser = async (user: Omit<User, "id">): Promise<UserEntity | null> => {
+export const createUser = async (
+  user: Omit<User, "id">,
+): Promise<UserEntity | null> => {
   const passwordHash = await hashPassword(user.password);
   return prisma.user.create({
     data: {
       name: user.name,
       email: user.email,
       passwordHash,
-      roles: user.roles
-    }
+      roles: user.roles,
+    },
   });
 };
 
@@ -34,8 +36,8 @@ export const updateUser = async (
       name: user.name,
       email: user.email,
       passwordHash: passwordHash,
-      roles: user.roles
-    }
+      roles: user.roles,
+    },
   });
 };
 
