@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import type { AppConfig, NodeEnv } from "../types/AppConfig";
-import type { DbConfig } from "../types/DbConfig";
 
 dotenv.config();
 
@@ -17,15 +16,6 @@ export const appConfig: AppConfig = {
     route: "/static",
     dir: "public",
   },
-};
-
-export const dbConfig: DbConfig = {
-  host: process.env.DB_HOST || "localhost",
-  port: parseInt(process.env.DB_PORT || "5432", 10),
-  username: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "postgres",
-  database: process.env.DB_NAME || "express_oh",
-  ssl: process.env.DB_SSL === "true",
 };
 
 function getNodeEnv(): NodeEnv {

@@ -2,7 +2,7 @@ import type { Request } from "express";
 export interface JwtPayload {
   userId: string;
   email: string;
-  roles: readonly UserRole[];
+  roles: string[];
   iat?: number;
   exp?: number;
 }
@@ -19,7 +19,7 @@ export interface LoginResponse {
   user: {
     id: string;
     email: string;
-    roles: readonly UserRole[];
+    roles: string[];
   };
 }
 

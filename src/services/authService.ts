@@ -3,11 +3,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { authConfig } from "../config/authConfig";
 import type { JwtPayload, LoginDto, LoginResponse } from "../types/Auth";
-import { UserRepository } from "../repositories/userRepository";
-import { getDatabase } from "../common/utils/bootstrap";
-import type { User } from "../types/User";
-
-const userRepository = () => UserRepository.getInstance(getDatabase());
+import type { UserEntity } from "../types/User";
+import { prisma } from "../prisma/prismaClient";
 
 const generateToken = async (
   payload: Omit<JwtPayload, "iat" | "exp">,
@@ -31,11 +28,9 @@ const comparePasswords = async (
 export const login = async (credentials: LoginDto): Promise<LoginResponse> => {
   const fetchedUser = await findUserByEmail(credentials.email);
 
-  console.log(fetchedUser);
-
   if (
     credentials.email !== fetchedUser?.email ||
-    !(await comparePasswords(credentials.password, fetchedUser.password_hash))
+    !(await comparePasswords(credentials.password, fetchedUser.passwordHash))
   ) {
     throw new Error("Invalid credentials");
   }
@@ -58,6 +53,6 @@ export const login = async (credentials: LoginDto): Promise<LoginResponse> => {
   };
 };
 
-const findUserByEmail = async (email: string): Promise<User | undefined> => {
-  return userRepository().findByEmail(email);
+const findUserByEmail = async (email: string): Promise<UserEntity | null> => {
+  return prisma.user.findUnique({ where: { email } });
 };

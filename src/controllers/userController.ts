@@ -44,6 +44,13 @@ export const postUser = async (req: Request, res: Response) => {
     const newUser: CreateUserDto = req.body;
     const createdUser = await createUser(newUser);
 
+    if (!createdUser) {
+      return res.status(400).json({
+        status: "error",
+        message: "Failed to create user",
+      });
+    }
+
     const response: ApiResponse<UserResponse> = {
       status: "success",
       data: {

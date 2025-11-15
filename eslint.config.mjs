@@ -5,7 +5,13 @@ import prettierRecommended from "eslint-plugin-prettier/recommended";
 
 export default tseslint.config(
   {
-    ignores: ["dist/", "node_modules/", "coverage/", "**/*.d.ts"],
+    ignores: [
+      "dist/",
+      "node_modules/",
+      "coverage/",
+      "**/*.d.ts",
+      "prisma.config.ts",
+    ],
   },
 
   eslint.configs.recommended,

@@ -6,23 +6,6 @@ import cors from "cors";
 import compression from "compression";
 import { appConfig } from "../../config/config";
 import { devCorsOptions } from "../constants/corsOptions";
-import { dbConfig } from "../../config/config";
-import type { Database } from "../../database/interfaces/Database";
-import { DatabaseManager } from "../../database/DatabaseManager";
-
-export const initializeDatabase = async (): Promise<void> => {
-  try {
-    const dbManager = DatabaseManager.getInstance();
-    await dbManager.initialize("postgres", dbConfig);
-  } catch (error) {
-    console.error("Failed to initialize database:", error);
-    throw error;
-  }
-};
-
-export const getDatabase = (): Database => {
-  return DatabaseManager.getInstance().getDatabase();
-};
 
 export const bootStrapApplication = (app: Express): void => {
   app.use(
@@ -52,14 +35,4 @@ export const bootStrapApplication = (app: Express): void => {
   app.use(morgan("dev"));
   app.use(cors(devCorsOptions));
   app.use(express.json());
-};
-
-export const gracefulShutdown = async (): Promise<void> => {
-  console.log("Initiating graceful shutdown...");
-  try {
-    await DatabaseManager.getInstance().disconnect();
-    console.log("Database connection closed");
-  } catch (error) {
-    console.error("Error during shutdown:", error);
-  }
 };
