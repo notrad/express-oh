@@ -1,6 +1,6 @@
 import { ObjectId } from "mongodb";
 import { getDb } from "../mongodb/mongoClient";
-import type { CreateUserDto, UpdateUserDto } from "../types/User";
+import type { CreateUserDto, User } from "../types/User";
 
 export const findUserById = async (id: string) => {
   const db = await getDb();
@@ -13,7 +13,7 @@ export const createUser = async (user: CreateUserDto) => {
   return { ...user, _id: result.insertedId };
 };
 
-export const updateUser = async (id: string, user: UpdateUserDto) => {
+export const updateUser = async (id: string, user: Partial<User>) => {
   const db = await getDb();
   const result = await db
     .collection("users")

@@ -27,12 +27,6 @@ export interface CreateUserDto {
   createAt: Date;
   updateAt: Date;
 }
-
-export interface UpdateUserDto {
-  name?: string;
-  email?: string;
-}
-
 export interface UserResponse {
   id: string;
   name: string;
