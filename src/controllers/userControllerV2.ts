@@ -8,7 +8,7 @@ import {
 import type { CreateUserDto, UserResponse } from "../types/User";
 import type { ApiResponse } from "../types/Api";
 
-export const getUserV2 = async (req: Request, res: Response) => {
+export const getUser = async (req: Request, res: Response) => {
   try {
     const user = await findUserById(req.params.id);
     if (!user) {
@@ -36,7 +36,7 @@ export const getUserV2 = async (req: Request, res: Response) => {
   }
 };
 
-export const postUserV2 = async (req: Request, res: Response) => {
+export const postUser = async (req: Request, res: Response) => {
   try {
     const user: CreateUserDto = req.body;
     const createdUser = await createUser(user);
@@ -67,7 +67,7 @@ export const postUserV2 = async (req: Request, res: Response) => {
   }
 };
 
-export const putUserV2 = async (req: Request, res: Response) => {
+export const putUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
     const updatedFields = req.body;
